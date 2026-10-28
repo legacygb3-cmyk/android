@@ -1,0 +1,1246 @@
+Practical 01
+___________________
+
+Develop a simple "Hello World" Android application demonstrating project creation, Android Studio interface, Android components, AVD creation, and application execution.
+
+Project 1: Hello World
+
+Project Name: HelloWorld
+
+Template: Empty Views Activity
+
+Project Architecture:
+
+Total 5 files
+
+
+Filename: MainActivity.java
+
+package com.example.helloworld;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+  }
+}
+
+Path: app>java>com.example.helloworld>MainActivity.java
+
+
+Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center"
+  android:padding="16dp">
+
+  <TextView
+      android:id="@+id/text_hello"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Hello, World!"
+      android:textSize="24sp"
+      android:textStyle="bold"
+      android:textColor="#000000" />
+</LinearLayout>
+
+Path: app>res>layout>activity_main.xml
+
+
+Filename: AndroidManifest.xml
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.example.helloworld">
+  <application
+      android:allowBackup="true"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:supportsRtl="true"
+      android:theme="@style/Theme.Helloworld">
+      <activity android:name=".MainActivity"
+          android:exported="true">
+          <intent-filter>
+              <action android:name="android.intent.action.MAIN" />
+              <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+      </activity>
+  </application>
+</manifest>
+
+Path: app>manifest>AndroidManifest.xml
+
+
+Filename: colors.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="black">#FF000000</color>
+  <color name="white">#FFFFFFFF</color>
+  <color name="purple_500">#6200EE</color>
+  <color name="purple_700">#3700B3</color>
+</resources>
+
+Path: app>res>values>colors.xml
+
+
+Filename: styles.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Theme.Helloworld"
+      parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+      <!-- Customize your theme here -->
+      <item name="colorPrimary">@color/purple_500</item>
+      <item name="colorPrimaryVariant">@color/purple_700</item>
+      <item name="colorOnPrimary">@color/white</item>
+  </style>
+</resources>
+
+Path: app>res>values>styles.xml
+
+
+VI (Prebuild Project Code: To ensure proper project detail: No need to update until needed)
+
+Filename: build.gradle.kts (Module:app)
+
+plugins {
+  alias(libs.plugins.android.application)
+}
+
+android {
+  namespace = "com.example.helloworld"
+  compileSdk = 35
+
+  defaultConfig {
+      applicationId = "com.example.helloworld"
+      minSdk = 24
+      targetSdk = 35
+      versionCode = 1
+      versionName = "1.0"
+
+      testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+      release {
+          isMinifyEnabled = false
+          proguardFiles(
+              getDefaultProguardFile("proguard-android-optimize.txt"),
+              "proguard-rules.pro"
+          )
+      }
+  }
+
+  compileOptions {
+      sourceCompatibility = JavaVersion.VERSION_11
+      targetCompatibility = JavaVersion.VERSION_11
+  }
+}
+
+dependencies {
+  implementation(libs.appcompat)
+  implementation(libs.material)
+  implementation(libs.activity)
+  implementation(libs.constraintlayout)
+  testImplementation(libs.junit)
+  androidTestImplementation(libs.ext.junit)
+  androidTestImplementation(libs.espresso.core)
+}
+
+Path: Gradle Scripts > build.gradle.kts
+
+Above the Android Studio near Main Menu Click the Play button to Run the Program.
+
+Recommended compulsory AVD Emulator: Pixel 4 API 25 with version 7.1.1 Nougat.
+
+
+Practical 02
+_____________________________
+
+Develop an Android application demonstrating the use of Programming Resources (colors.xml, themes.xml, strings.xml, dimens.xml, drawable resources) and apply them in UI components.
+
+Programming Resources
+
+Android Resources: (Color, Theme, String, Drawable, Dimension, Image)
+
+Project Name: Practical 2R
+
+Template: Empty Views Activity
+
+Language: Java
+
+Project Architecture: 1 AndroidManifest.xml file, 6 Java Files, 1 image in drawable image file, 6 layout .xml files and 4 values .xml files: Total 18 files.
+
+
+Filename: AndroidManifest.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+  <application
+      android:allowBackup="true"
+      android:dataExtractionRules="@xml/data_extraction_rules"
+      android:fullBackupContent="@xml/backup_rules"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:supportsRtl="true"
+      android:theme="@style/Theme.AppCompat.Light"
+      tools:targetApi="31">
+
+      <activity android:name=".ThemeActivity" android:label="Theme Demo" />
+      <activity android:name=".StringActivity" android:label="String Demo" />
+      <activity android:name=".DrawableActivity" android:label="Drawable Demo" />
+      <activity android:name=".DimensionActivity" android:label="Dimension Demo" />
+      <activity android:name=".ColorActivity" android:label="Color Demo" />
+
+      <activity
+          android:name=".MainActivity"
+          android:exported="true"
+          android:label="@string/app_name"
+          android:theme="@style/Theme.AppCompat.Light">
+          <intent-filter>
+              <action android:name="android.intent.action.MAIN" />
+              <category android:name="android.intent.category.LAUNCHER" />
+          </intent-filter>
+      </activity>
+  </application>
+</manifest>
+
+Path: app>manifests>AndroidManifest.xml
+
+
+Total 6 .java files path
+
+
+1. Filename: ColorActivity.java
+
+package com.example.practical2r;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ColorActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_color);
+  }
+}
+
+
+2. Filename: DimensionActivity.java
+
+package com.example.practical2r;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DimensionActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_dimension);
+  }
+}
+
+
+3. Filename: DrawableActivity.java
+
+package com.example.practical2r;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DrawableActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_drawable);
+  }
+}
+
+
+4. Filename: MainActivity.java
+
+package com.example.practical2r;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+  }
+
+  public void openColorActivity(View view) {
+      startActivity(new Intent(this, ColorActivity.class));
+  }
+
+  public void openThemeActivity(View view) {
+      startActivity(new Intent(this, ThemeActivity.class));
+  }
+
+  public void openStringActivity(View view) {
+      startActivity(new Intent(this, StringActivity.class));
+  }
+
+  public void openDrawableActivity(View view) {
+      startActivity(new Intent(this, DrawableActivity.class));
+  }
+
+  public void openDimensionActivity(View view) {
+      startActivity(new Intent(this, DimensionActivity.class));
+  }
+}
+
+
+5. Filename: StringActivity.java
+
+package com.example.practical2r;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class StringActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_string);
+  }
+}
+
+
+6. Filename: ThemeActivity.java
+
+package com.example.practical2r;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ThemeActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_theme);
+  }
+}
+
+
+Image File Path
+
+Image Detail: pebbles.jpg
+
+(Copy your image file from your local folder and only copy and paste into drawable folder. Don’t Drag and Drop). Image size must within KB size.
+
+
+Total 6 Layout .xml files path
+
+
+1. Filename: activity_color.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorRed">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Color Activity"
+      android:textSize="24sp"
+      android:layout_centerInParent="true"
+      android:textColor="@color/white"/>
+</RelativeLayout>
+
+
+2. Filename: activity_dimension.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="16dp"
+  android:gravity="center">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Dimension Activity"
+      android:textSize="24sp"
+      android:textColor="@android:color/black"/>
+  <!-- Button demonstrating dimension usage -->
+  <Button
+      android:id="@+id/dimensionButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Click Me!"
+      android:textSize="@dimen/button_text_size"
+      android:padding="@dimen/button_padding"
+      android:layout_marginTop="@dimen/button_margin_top"
+      android:background="@color/btn_color"/>
+</LinearLayout>
+
+
+3. Filename: activity_drawable.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/pebbles">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Drawable Activity"
+      android:textSize="24sp"
+      android:layout_centerInParent="true"
+      android:textColor="@android:color/white"/>
+</RelativeLayout>
+
+
+4. Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".MainActivity"
+  android:background="@drawable/pebbles">
+  <Button
+      android:id="@+id/btnColor"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Color Demo"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="50dp"
+      android:onClick="openColorActivity"/>
+  <Button
+      android:id="@+id/btnTheme"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Theme Demo"
+      android:layout_below="@id/btnColor"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="20dp"
+      android:onClick="openThemeActivity"/>
+  <Button
+      android:id="@+id/btnString"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="String Demo"
+      android:layout_below="@id/btnTheme"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="20dp"
+      android:onClick="openStringActivity"/>
+
+  <Button
+      android:id="@+id/btnDrawable"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Drawable Demo"
+      android:layout_below="@id/btnString"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="20dp"
+      android:onClick="openDrawableActivity"/>
+  <Button
+      android:id="@+id/btnDimension"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Dimension Demo"
+      android:layout_below="@id/btnDrawable"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="20dp"
+      android:onClick="openDimensionActivity"/>
+</RelativeLayout>
+
+
+5. Filename: activity_string.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center"
+  android:background="@color/colorPrimaryDark">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/Welcome_Message"
+      android:textSize="24sp"
+      android:textColor="@android:color/white"/>
+</LinearLayout>
+
+
+6. Filename: activity_theme.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/holo_blue_bright">
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="You got this sky blue theme"
+      android:textSize="24sp"
+      android:layout_centerInParent="true"
+      android:textColor="@android:color/black"/>
+</RelativeLayout>
+
+
+Total 4 values .xml files
+
+
+1. Filename: colors.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="purple_200">#FFBB86FC</color>
+  <color name="purple_500">#FF6200EE</color>
+  <color name="purple_700">#FF3700B3</color>
+  <color name="teal_200">#9ADA03</color>
+  <color name="teal_700">#FF018786</color>
+  <color name="black">#FF000000</color>
+  <color name="white">#FFFFFFFF</color>
+  <color name="btn_color">#FFC49662</color>
+  <color name="colorRed">#E91E63</color>
+  <color name="colorBlue">#0000FF</color>
+  <color name="colorPrimary">#6200EE</color>
+  <color name="colorPrimaryDark">#3700B3</color>
+  <color name="colorAccent">#03DAC5</color>
+</resources>
+
+
+2. Filename: dimens.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="button_margin_top">24dp</dimen>
+  <dimen name="button_padding">16dp</dimen>
+  <dimen name="button_text_size">18sp</dimen>
+</resources>
+
+
+3. Filename: strings.xml
+
+<resources>
+  <string name="app_name">Practical 2R</string>
+  <string name="button_name">Click on me</string>
+  <string name="ParaHead">Welcome to Practical 2R</string>
+  <string name="Description">This is a string resource demo.</string>
+  <string name="Welcome_Message">Welcome to Android Studio. This is your Practical 2 Resources.</string>
+</resources>
+
+
+4. Filename: themes.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+      <item name="colorPrimary">@color/colorPrimary</item>
+      <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+      <item name="colorAccent">@color/colorAccent</item>
+  </style>
+  <style name="BlueTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+      <item name="colorPrimary">@color/colorPrimary</item>
+      <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+      <item name="colorAccent">@color/colorAccent</item>
+      <item name="android:background">#00F0EF</item>
+      <item name="android:textColor">#000000</item>
+  </style>
+</resources>
+
+
+Above the Android Studio near Main Menu Click the Play button to Run the Program.
+
+Recommended compulsory AVD Emulator: Pixel 4 API 25 with version 7.1.1 Nougat.
+
+Play Emulator.
+
+
+Practical 03
+_________________________
+
+Develop an Android application demonstrating complete Activity Lifecycle methods and analyze execution using Logcat.
+
+Project Name: logcat
+
+package com.example.logact;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+  }
+
+  @Override
+  protected void onStart() {
+      super.onStart();
+      Log.d("on start invoked", "on started");
+  }
+
+  @Override
+  protected void onPostResume() {
+      super.onPostResume();
+      Log.d("on resume invoked", "on resume");
+  }
+
+  @Override
+  protected void onPause() {
+      super.onPause();
+      Log.d("on pause invoked", "on pause");
+  }
+
+  @Override
+  protected void onStop() {
+      super.onStop();
+      Log.d("on stop invoked", "on stopped");
+  }
+
+  @Override
+  protected void onDestroy() {
+      super.onDestroy();
+      Log.d("on destroy invoked", "on destroy");
+  }
+}
+
+
+Practical 04
+___________________________
+
+2. Fragments and Activity Interaction
+
+Develop an Android application to create and integrate a Fragment and demonstrate Fragment lifecycle methods.
+
+Project Name: FragmentLifecycleDemo
+
+Create a new fragment class:
+
+java->new-> fragment->fragment(blank)
+
+Fragment Name: DemoFragment
+
+Fragment Layout name: fragment_demo
+
+
+Filename: DemoFragment.java
+
+package com.example.fragmentlifecycledemo;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class DemoFragment extends Fragment {
+
+  String TAG = "FragmentLifecycle";
+
+  @Override
+  public void onAttach(@NonNull Context context) {
+      super.onAttach(context);
+      Log.d(TAG, "onAttach() executed");
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      Log.d(TAG, "onCreate() executed");
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+      Log.d(TAG, "onCreateView() executed");
+      return inflater.inflate(R.layout.fragment_demo, container, false);
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+      Log.d("on view created invoked", "onViewCreated() executed");
+  }
+
+  @Override
+  public void onStart() {
+      super.onStart();
+      Log.d("on start invoked", "on started");
+  }
+
+  @Override
+  public void onResume() {
+      super.onResume();
+      Log.d("on resume invoked", "on resume");
+  }
+
+  @Override
+  public void onPause() {
+      super.onPause();
+      Log.d("on pause invoked", "on pause");
+  }
+
+  @Override
+  public void onStop() {
+      super.onStop();
+      Log.d("on stop invoked", "on stopped");
+  }
+
+  @Override
+  public void onDestroyView() {
+      super.onDestroyView();
+      Log.d("on destroyview invoked", "on destroyview() executed");
+  }
+
+  @Override
+  public void onDestroy() {
+      super.onDestroy();
+      Log.d("on destroy invoked", "on destroy");
+  }
+
+  @Override
+  public void onDetach() {
+      super.onDetach();
+      Log.d("on detach invoked", "on detach");
+  }
+}
+
+
+Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/fragment_container_view_tag"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".MainActivity">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Hello World!"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+Filename: MainActivity.java
+
+package com.example.fragmentlifecycledemo;
+
+import android.os.Bundle;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+
+      DemoFragment fragment = new DemoFragment();
+      FragmentTransaction transaction =
+              getSupportFragmentManager().beginTransaction();
+      transaction.replace(R.id.fragment_container_view_tag, fragment);
+      transaction.commit();
+  }
+}
+
+
+fragment_demo.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".DemoFragment">
+
+  <!-- TODO: Update blank fragment layout -->
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:text="@string/hello_blank_fragment" />
+
+</FrameLayout>
+
+
+Practical 05
+______________________________
+
+Develop an Android application implementing Fragment-based UI navigation between multiple screens.
+
+Activity Life Cycle, Activity methods, Multiple Activities, Life Cycle of fragments and multiple fragments.
+
+Project Name: Fragment Lifecycle
+
+Template: Empty Views Activity
+
+Language: Java
+
+Project Architecture: Total 6 files
+
+
+I Filename: MainActivity.java
+
+package com.example.fragmentlifecycle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity {
+
+  private boolean isFragmentOneLoaded = true;
+  private final androidx.fragment.app.FragmentManager fragmentManager =
+          getSupportFragmentManager();
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+
+      Button btnChange = findViewById(R.id.btn_change); // Ensure ID matches activity_main.xml
+      loadFragmentOne();
+
+      btnChange.setOnClickListener(v -> {
+          if (isFragmentOneLoaded) {
+              loadFragmentTwo();
+          } else {
+              loadFragmentOne();
+          }
+      });
+  }
+
+  private void loadFragmentOne() {
+      androidx.fragment.app.FragmentTransaction transaction =
+              fragmentManager.beginTransaction();
+      FragmentOne fragment = new FragmentOne();
+      transaction.replace(R.id.fragment_holder, fragment); // Ensure ID matches activity_main.xml
+      transaction.addToBackStack(null);
+      transaction.commit();
+      isFragmentOneLoaded = true;
+  }
+
+  private void loadFragmentTwo() {
+      androidx.fragment.app.FragmentTransaction transaction =
+              fragmentManager.beginTransaction();
+      FragmentTwo fragment = new FragmentTwo();
+      transaction.replace(R.id.fragment_holder, fragment); // Ensure ID matches activity_main.xml
+      transaction.addToBackStack(null);
+      transaction.commit();
+      isFragmentOneLoaded = false;
+  }
+}
+
+Path: app>java>com.example.fragmentlifecycle>MainActivity.java
+
+
+II Filename: FragmentOne.java
+
+package com.example.fragmentlifecycle;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+
+public class FragmentOne extends Fragment {
+  private static final String TAG = "FragmentOne";
+
+  @Override
+  public void onAttach(Context context) {
+      super.onAttach(context);
+      Log.d(TAG, "onAttach");
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+      Log.d(TAG, "onCreateView");
+      return inflater.inflate(R.layout.fragment_one, container, false);
+  }
+}
+
+Path: app>java>com.example.fragmentlifecycle > FragmentOne.java
+
+
+III Filename: FragmentTwo.java
+
+package com.example.fragmentlifecycle;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+
+public class FragmentTwo extends Fragment {
+  private static final String TAG = "FragmentTwo";
+
+  @Override
+  public void onAttach(Context context) {
+      super.onAttach(context);
+      Log.d(TAG, "onAttach");
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+      Log.d(TAG, "onCreateView");
+      return inflater.inflate(R.layout.fragment_two, container, false);
+  }
+}
+
+Path: app>java>com.example.fragmentlifecycle > FragmentTwo.java
+
+
+IV Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".MainActivity">
+
+  <!-- Button with ID btn_change -->
+  <!-- FrameLayout with ID fragment_holder -->
+  <FrameLayout
+      android:id="@+id/fragment_holder"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="2">
+
+      <Button
+          android:id="@+id/btn_change"
+          android:layout_width="365dp"
+          android:layout_height="88dp"
+          android:layout_margin="15dp"
+          android:layout_marginTop="15dp"
+          android:backgroundTint="@android:color/holo_green_dark"
+          android:text="Change Fragment"
+          android:textAllCaps="false"
+          android:textSize="24sp" />
+  </FrameLayout>
+</LinearLayout>
+
+Path: app>res>layout>activity_main.xml
+
+
+V Filename: fragment_one.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="Fragment One"
+      android:textSize="24sp" />
+</RelativeLayout>
+
+Path: app>res>layout>fragment_one.xml
+
+
+VI Filename: fragment_two.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="Fragment Two"
+      android:textSize="24sp" />
+</RelativeLayout>
+
+Path: app>res>layout>fragment_two.xml
+
+Above the Android Studio near Main Menu Click the Play button to Run the Program.
+
+
+Practical 06
+________________________
+
+Develop an Android application demonstrating communication between Activity and Fragment.
+
+Project Name: ActivityFragmentCommunication
+
+Creating Fragment
+
+java package → New→ Fragment → Fragment (Blank)
+
+Fragment Name: DemoFragment
+
+Layout Name: fragment_demo
+
+
+Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/fragment_container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"/>
+
+
+Open From res/layout:
+
+Filename: fragment_demo.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:gravity="center"
+  android:orientation="vertical"
+  android:padding="20dp">
+
+  <TextView
+      android:id="@+id/txtMessage"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textSize="22sp"
+      android:text="Message from Activity"/>
+
+  <Button
+      android:id="@+id/btnSend"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Send Message to Activity"
+      android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+
+Modify DemoFragment.java.
+
+Filename: DemoFragment.java
+
+package com.example.activityfragmentcommunication;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+public class DemoFragment extends Fragment {
+
+  TextView txtMessage;
+  Button btnSend;
+  String activityMessage;
+
+  FragmentCommunication communication;
+
+  public interface FragmentCommunication {
+      void onMessageFromFragment(String message);
+  }
+
+  // Receive Activity object
+  @Override
+  public void onAttach(@NonNull Context context) {
+      super.onAttach(context);
+      communication = (FragmentCommunication) context;
+  }
+
+  // Method to receive data from Activity
+  public static DemoFragment newInstance(String message) {
+      DemoFragment fragment = new DemoFragment();
+      Bundle bundle = new Bundle();
+      bundle.putString("msg", message);
+      fragment.setArguments(bundle);
+      return fragment;
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+      View view = inflater.inflate(R.layout.fragment_demo, container, false);
+
+      txtMessage = view.findViewById(R.id.txtMessage);
+      btnSend = view.findViewById(R.id.btnSend);
+
+      // Receiving data from Activity
+      if (getArguments() != null) {
+          activityMessage = getArguments().getString("msg");
+          txtMessage.setText(activityMessage);
+      }
+
+      // Sending data to Activity
+      btnSend.setOnClickListener(v -> {
+          communication.onMessageFromFragment(
+                  "Hello Activity! Message from Fragment");
+      });
+
+      return view;
+  }
+}
+
+
+Filename: MainActivity.java
+
+package com.example.activityfragmentcommunication;
+
+import android.os.Bundle;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity
+      implements DemoFragment.FragmentCommunication {
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+
+      // Sending data from Activity to Fragment
+      DemoFragment fragment = DemoFragment.newInstance(
+              "Hello Fragment! Message from Activity"
+      );
+
+      getSupportFragmentManager()
+              .beginTransaction()
+              .replace(R.id.fragment_container, fragment)
+              .commit();
+  }
+
+  // Receiving data from Fragment
+  @Override
+  public void onMessageFromFragment(String message) {
+      Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+  }
+}
+
+
+Practical 07
+__________________________
+
+III. Basic Layout Management
+
+Develop an Android application using LinearLayout (Horizontal and Vertical) to design structured UI.
+
+Filename: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:padding="20dp">
+
+  <!-- Title -->
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Student Registration"
+      android:textSize="26sp"
+      android:textStyle="bold"
+      android:layout_gravity="center"
+      android:layout_marginBottom="20dp"/>
+
+  <!--Vertical Layout Components -->
+  <EditText
+      android:id="@+id/etName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Enter Name"
+      android:layout_marginBottom="10dp"/>
+
+  <EditText
+      android:id="@+id/etEmail"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Enter Email"
+      android:layout_marginBottom="20dp"/>
+
+  <!-- Horizontal LinearLayout -->
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="center">
+
+      <Button
+          android:id="@+id/btnSubmit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Submit"/>
+
+      <Button
+          android:id="@+id/btnReset"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Reset"
+          android:layout_marginStart="20dp"/>
+
+  </LinearLayout>
+</LinearLayout>
