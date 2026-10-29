@@ -1,0 +1,3079 @@
+MODULE 2 – ANDROID PRACTICALS
+1	AppBar (Toolbar) and Options Menu
+2	AlertDialog and Custom DialogFragment
+3	Contextual Menu and Popup Menu
+4	Explicit and Implicit Intents
+5	Event Handling using Listeners (OnClick and OnLongClick)
+6	Adapters using Spinner and ListView
+7	Started and Bound Services
+8	Notifications using Notification Manager
+9	Static and Dynamic Broadcast Receivers
+10	SQLite Database CRUD Operations
+11	SQLite Database with ListView
+12	Fetching and Parsing JSON Data from the Web
+13	Threads and Handlers for Background Processing
+14	Media APIs and Telephone APIs
+15	Runtime Permissions and AndroidManifest.xml Security
+
+
+====================================================================
+PRACTICAL 1
+SIMPLE STEPS
+Create project ToolbarMenuDemo. Add Toolbar in activity_main.xml. Create res/menu/menu_main.xml with Home, Settings, About and Logout. Paste the Java code into MainActivity.java. Run and tap the three-dot menu.
+
+CODE FROM PDF
+
+1. Develop an Android application implementing AppBar (Toolbar) and Options Menu.
+
+Project Name: ToolbarMenuDemo
+
+FileName: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/main"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent" android:orientation="vertical">
+
+    <!-- Toolbar -->
+
+    <androidx.appcompat.widget.Toolbar
+
+       android:id="@+id/toolbar"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="?attr/actionBarSize"
+
+       android:background="?attr/colorPrimary"
+
+       app:title="Toolbar Demo"
+
+       app:titleTextColor="@android:color/white"/>
+
+    <!--Main Content -->
+
+    <TextView
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="AppBar and Options Menu Example"
+
+       android:textSize="22sp"
+
+       android:padding="20dp"/>
+
+</LinearLayout>
+
+Create a Menu Resource File.
+Right Click: Res → New→ Android Resource Directory
+
+Directory Name: menu
+Resource Type: menu
+
+Create Menu XML File.
+Right Click: menu New→ Menu Resource File Give name as menu_main.xml
+
+File Name : menu_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+
+       android:id="@+id/menu_home"
+
+       android:title="Home"
+
+       app:showAsAction="never"/>
+
+    <item
+
+       android:id="@+id/menu_settings"
+
+       android:title="Settings"
+
+       app:showAsAction="never"/>
+
+    <item
+
+       android:id="@+id/menu_about"
+
+       android:title="About"
+
+       app:showAsAction="never"/>
+
+    <item
+
+       android:id="@+id/menu_logout"
+
+       android:title="Logout"
+
+       app:showAsAction="never"/>
+
+</menu>
+
+File Name: MainActivity.java.
+
+package com.example.toolbarmenudemo;
+
+import android.os.Bundle;
+
+import android.view.Menu;
+
+import android.view.MenuItem;
+
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.widget.Toolbar;
+
+public class MainActivity extends AppCompatActivity {
+
+   Toolbar toolbar;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.toolbar);
+
+        // Set Toolbar as AppBar
+
+        setSupportActionBar(toolbar);
+
+   }
+
+   // Create Options Menu
+
+   @Override
+
+   public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+
+    }
+
+    // Handle Menu Item Click
+
+    @Override
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.menu_home) {
+
+            Toast.makeText(this, "Home Selected", Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.menu_settings) {
+
+           Toast.makeText(this, "Settings Selected",
+Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.menu_about) {
+
+            Toast.makeText(this, "About Selected", Toast.LENGTH_SHORT).show();
+
+        } else if (id == R.id.menu_logout) {
+
+            Toast.makeText(this, "Logout Selected", Toast.LENGTH_SHORT).show();
+
+        }
+
+        return true;
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 2
+SIMPLE STEPS
+Create project DialogDemo. Add two buttons in activity_main.xml. Create dialog_custom.xml. Create CustomDialogFragment.java. Paste MainActivity.java. Run and test both Show AlertDialog and Show Custom Dialog.
+
+CODE FROM PDF
+
+2. Develop an Android application demonstrating AlertDialog and custom
+DialogFragment.
+
+ProjectName: DialogDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:id="@+id/main"
+
+   android:layout_width="match_parent" android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:gravity="center" android:padding="20dp">
+
+   <Button
+
+       android:id="@+id/btnAlert"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Show AlertDialog"/>
+
+   <Button
+
+       android:id="@+id/btnCustom" android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content" android:text="Show Custom Dialog"
+
+       android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+Create Custom Dialog Layout.
+Create:
+res→ layout → New-> XML-> New Layout XML File → dialog_custom
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+  xmlns:android="http://schemas.android.com/apk/res/android"
+
+  android:layout_width="match_parent"
+
+  android:layout_height="wrap_content"
+
+  android:orientation="vertical"
+
+  android:padding="20dp">
+
+  <TextView
+
+      android:layout_width="wrap_content"
+
+      android:layout_height="wrap_content"
+
+      android:text="Custom DialogFragment"
+
+      android:textSize="22sp"
+
+      android:textStyle="bold"/>
+
+  <EditText
+
+      android:id="@+id/etName"
+
+      android:layout_width="match_parent"
+
+      android:layout_height="wrap_content"
+
+      android:hint="Enter Name"
+
+      android:layout_marginTop="15dp"/>
+
+</LinearLayout>
+
+Create Dialog Fragment Class.
+Right Click: java package → New → Java Class
+
+Class Name: CustomDialogFragment.java
+
+package com.example.dialogdemo;
+
+import android.app.AlertDialog;
+
+import android.app.Dialog;
+
+import android.os.Bundle;
+
+import android.view.LayoutInflater;
+
+import android.view.View;
+
+import android.widget.EditText;
+
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import androidx.fragment.app.DialogFragment;
+
+public class CustomDialogFragment extends DialogFragment {
+
+   EditText etName;
+
+   @NonNull
+
+   @Override
+
+   public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+       LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+       View view = inflater.inflate(R.layout.dialog_custom, null);
+
+        etName = view.findViewById(R.id.etName);
+
+        builder.setView(view)
+
+                .setTitle("Custom Dialog")
+
+                .setPositiveButton("Submit", (dialog, which) -> {
+
+                     String name = etName.getText().toString();
+
+                     Toast.makeText(getActivity(),
+
+                              "Entered: " + name,
+
+                              Toast.LENGTH_SHORT).show();
+
+                })
+
+               .setNegativeButton("Cancel", (dialog, which) ->
+dialog.dismiss());
+
+        return builder.create();
+
+    }
+
+}
+
+FileName: MainActivity.java
+
+package com.example.dialogdemo;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+  Button btnAlert, btnCustom;
+
+  @Override
+
+  protected void onCreate(Bundle savedInstanceState) {
+
+      super.onCreate(savedInstanceState);
+
+      setContentView(R.layout.activity_main);
+
+      btnAlert = findViewById(R.id.btnAlert);
+
+      btnCustom = findViewById(R.id.btnCustom);
+
+      // AlertDialog Example
+
+      btnAlert.setOnClickListener(v -> {
+
+          AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+          builder.setTitle("Delete File")
+
+                     .setMessage("Are you sure you want to delete?")
+
+                     .setPositiveButton("YES", (dialog, which) -> {
+
+                          Toast.makeText(this,
+
+                                 "File Deleted",
+
+                                 Toast.LENGTH_SHORT).show();
+
+                     })
+
+                     .setNegativeButton("NO", (dialog, which) ->
+dialog.dismiss());
+
+              builder.show();
+
+        });
+
+        // Custom Dialog Example
+
+        btnCustom.setOnClickListener(v -> {
+
+              CustomDialogFragment dialog = new CustomDialogFragment();
+
+              dialog.show(getSupportFragmentManager(), "CustomDialog");
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 3
+SIMPLE STEPS
+Create project MenuDemo. Add a TextView and button in activity_main.xml. Create res/menu/menu_options.xml. Paste MainActivity.java. Run, long-press the TextView for the context menu, and tap the button for the popup menu.
+
+CODE FROM PDF
+
+3. Develop an Android application implementing contextual menus and popup menus.
+
+ProjectName: MenuDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:gravity="center"
+
+   android:padding="20dp">
+
+   <TextView
+
+       android:id="@+id/txtContext"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Long Press Me"
+
+       android:textSize="24sp"
+
+       android:padding="20dp"/>
+
+   <Button
+
+       android:id="@+id/btnPopup"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Show Popup Menu"
+
+       android:layout_marginTop="30dp"/>
+
+</LinearLayout>
+
+Create a Menu Resource File.
+Right Click: res→ New → Android Resource Directory
+Directory Name: menu
+Resource Type: menu
+Click OK
+Right Click: menu → New → Menu Resource File
+
+File Name : menu_options
+
+File Name : menu_options.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <item
+
+       android:id="@+id/menu_edit" android:title="Edit"/>
+
+   <item
+
+       android:id="@+id/menu_delete"
+
+       android:title="Delete"/>
+
+   <item
+
+       android:id="@+id/menu_share"
+
+       android:title="Share"/>
+
+</menu>
+
+File Name: MainActivity.java
+
+package com.example.menudemo;
+
+import android.os.Bundle;
+
+import android.view.ContextMenu;
+
+import android.view.MenuItem;
+
+import android.view.View;
+
+import android.widget.Button;
+
+import android.widget.PopupMenu;
+
+import android.widget.TextView;
+
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+  TextView txtContext;
+
+  Button btnPopup;
+
+  @Override
+
+  protected void onCreate(Bundle savedInstanceState) {
+
+      super.onCreate(savedInstanceState);
+
+      setContentView(R.layout.activity_main);
+
+      txtContext = findViewById(R.id.txtContext);
+
+      btnPopup = findViewById(R.id.btnPopup);
+
+      // Register Context Menu
+
+      registerForContextMenu(txtContext);
+
+      // Popup Menu
+
+      btnPopup.setOnClickListener(v -> {
+
+          PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnPopup);
+
+          popupMenu.getMenuInflater().inflate(
+
+                  R.menu.menu_options,
+
+                  popupMenu.getMenu());
+
+          popupMenu.setOnMenuItemClickListener(item -> {
+
+                Toast.makeText(MainActivity.this,
+
+                       item.getTitle(),
+
+                       Toast.LENGTH_SHORT).show();
+
+                return true;
+
+          });
+
+          popupMenu.show();
+
+    });
+
+}
+
+// Context Menu Creation
+
+@Override
+
+public void onCreateContextMenu(ContextMenu menu,
+
+                                   View v,
+
+                                   ContextMenu.ContextMenuInfo menuInfo) {
+
+    super.onCreateContextMenu(menu, v, menuInfo);
+
+    menu.setHeaderTitle("Select Option");
+
+    getMenuInflater().inflate(R.menu.menu_options, menu);
+
+}
+
+// Context Menu Click Handling
+
+@Override
+
+public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        Toast.makeText(this,
+
+               item.getTitle(),
+
+               Toast.LENGTH_SHORT).show();
+
+        return true;
+
+    }
+
+}
+
+                               Intents, Events and Listeners
+
+
+====================================================================
+PRACTICAL 4
+SIMPLE STEPS
+Create project IntentDemo. Add two buttons in activity_main.xml. Create SecondActivity and activity_second.xml. Paste MainActivity.java. Run: Explicit Intent opens the second screen; Implicit Intent opens a web link.
+
+CODE FROM PDF
+
+4. Develop an Android application implementing Explicit and Implicit Intents.
+
+ProjectName: IntentDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent" android:layout_height="match_parent"
+
+    android:orientation="vertical"
+
+    android:gravity="center"
+
+    android:id="@+id/main"
+
+    android:padding="20dp">
+
+    <Button
+
+       android:id="@+id/btnExplicit"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Explicit Intent"/>
+
+    <Button
+
+       android:id="@+id/btnImplicit"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content" android:text="Implicit Intent"
+
+       android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+Create Second Activity.
+
+Right Click: java package → com.example.projectname -> New→ Activity → Empty Views
+Activity
+
+Activity Name: SecondActivity
+Click: Finish
+
+Design Second Activity Layout.
+Open: res→ layout → activity_second.xml
+
+File Name: activity_second.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:id="@+id/main"
+
+    android:gravity="center">
+
+    <TextView
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Welcome to Second Activity"
+
+       android:textSize="24sp"/>
+
+</LinearLayout>
+
+File Name: MainActivity.java.
+
+package com.example.intentdemo;
+
+import android.content.Intent;
+
+import android.net.Uri;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   Button btnExplicit, btnImplicit;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        btnExplicit = findViewById(R.id.btnExplicit);
+
+        btnImplicit = findViewById(R.id.btnImplicit);
+
+        // Explicit Intent
+
+        btnExplicit.setOnClickListener(v -> {
+
+              Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+
+              startActivity(intent);
+
+        });
+
+        // Implicit Intent
+
+        btnImplicit.setOnClickListener(v -> {
+
+              Intent intent = new Intent(
+
+                     Intent.ACTION_VIEW,
+
+                     Uri.parse("https://www.google.com")
+
+              );
+
+              startActivity(intent);
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 5
+SIMPLE STEPS
+Create project EventHandlingDemo. Add Click Me and Long Press Me buttons in activity_main.xml. Paste MainActivity.java. Run and tap or long-press the buttons to see messages.
+
+CODE FROM PDF
+
+5. Develop an Android application demonstrating Event Handling using Listeners
+(OnClick, OnLongClick, etc.).
+
+Project Name: EventHandlingDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:gravity="center"
+
+   android:padding="20dp">
+
+   <Button
+
+       android:id="@+id/btnClick"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Click Me"/>
+
+   <Button
+
+       android:id="@+id/btnLongClick"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Long Press Me"
+
+       android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+File Name: MainActivity.java
+
+package com.example.eventhandlingdemo;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   Button btnClick, btnLongClick;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+       super.onCreate(savedInstanceState);
+
+       setContentView(R.layout.activity_main);
+
+       btnClick = findViewById(R.id.btnClick);
+
+       btnLongClick = findViewById(R.id.btnLongClick);
+
+       // OnClickListener
+
+       btnClick.setOnClickListener(v -> {
+
+            Toast.makeText(
+
+                     MainActivity.this,
+
+                     "Button Clicked",
+
+                     Toast.LENGTH_SHORT
+
+              ).show();
+
+        });
+
+        // OnLongClickListener
+
+        btnLongClick.setOnLongClickListener(v -> {
+
+              Toast.makeText(
+
+                     MainActivity.this,
+
+                     "Button Long Pressed",
+
+                     Toast.LENGTH_SHORT
+
+              ).show();
+
+              return true;
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 6
+SIMPLE STEPS
+Create project AdapterDemo. Add Spinner and ListView in activity_main.xml. Paste MainActivity.java. Run: select a city from the Spinner or tap a city in the ListView.
+
+CODE FROM PDF
+
+6. Develop an Android application using Adapters to populate Spinner or ListView
+dynamically.
+
+Android Spinner is a view similar to the dropdown list which is used to select one option
+from the list of options. It provides an easy way to select one item from the list of items
+and it shows a dropdown list of all values when we click on it. The default value of the
+android spinner will be the currently selected value and by using Adapter we can easily
+bind the items to the spinner objects. Generally, we populate our Spinner control with a
+list of items by using an ArrayAdapter in our Kotlin/Java file.
+
+Project Name: AdapterDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:padding="20dp">
+
+   <Spinner
+
+        android:id="@+id/spinner"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"/>
+
+   <ListView
+
+        android:id="@+id/listView"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+File Name: MainActivity.java
+
+package com.example.adapterdemo;
+
+import android.os.Bundle;
+
+import android.view.View;
+
+import android.widget.AdapterView;
+
+import android.widget.ArrayAdapter;
+
+import android.widget.ListView;
+
+import android.widget.Spinner;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   Spinner spinner;
+
+   ListView listView;
+
+   String[] cities = {
+
+            "Mumbai",
+
+            "Pune",
+
+            "Delhi",
+
+            "Chennai",
+
+            "Hyderabad"
+
+   };
+
+  @Override
+
+  protected void onCreate(Bundle savedInstanceState) {
+
+      super.onCreate(savedInstanceState);
+
+      setContentView(R.layout.activity_main);
+
+      spinner = findViewById(R.id.spinner);
+
+      listView = findViewById(R.id.listView);
+
+      // Spinner Adapter
+
+      ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+
+              this,
+
+              android.R.layout.simple_spinner_dropdown_item,
+
+              cities
+
+      );
+
+      spinner.setAdapter(spinnerAdapter);
+
+      // ListView Adapter
+
+      ArrayAdapter<String> listAdapter = new ArrayAdapter<>(
+
+              this,
+
+              android.R.layout.simple_list_item_1,
+
+              cities
+
+      );
+
+      listView.setAdapter(listAdapter);
+
+      // Spinner Item Selection
+
+       spinner.setOnItemSelectedListener(new
+AdapterView.OnItemSelectedListener() {
+
+              @Override
+
+              public void onItemSelected(AdapterView<?> parent, View view,
+
+                                          int position, long id) {
+
+                  Toast.makeText(
+
+                          MainActivity.this,
+
+                          "Selected: " + cities[position],
+
+                          Toast.LENGTH_SHORT
+
+                  ).show();
+
+              }
+
+              @Override
+
+              public void onNothingSelected(AdapterView<?> parent) {
+
+              }
+
+        });
+
+        // ListView Item Click
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+
+              Toast.makeText(
+
+                     MainActivity.this,
+
+                     "Clicked: " + cities[position],
+
+                     Toast.LENGTH_SHORT
+
+              ).show();
+
+        });
+
+    }
+
+}
+
+                    Services, Notifications and Broadcast Receivers
+
+
+====================================================================
+PRACTICAL 7
+SIMPLE STEPS
+Create project ServiceDemo. Add three buttons in activity_main.xml. Create MyStartedService.java and MyBoundService.java. Paste MainActivity.java. Register both services inside the application tag in AndroidManifest.xml. Run and test Start, Stop and Bind Service.
+
+CODE FROM PDF
+
+7. Develop an Android application implementing Started and Bound Services.
+
+A bound service is the server in a client-server interface. It lets components such as
+activities bind to the service, send requests, receive responses, and perform
+interprocess communication (IPC). A bound service typically lives only while it serves
+another application component and does not run in the background indefinitely.
+
+Project Name: ServiceDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:gravity="center"
+
+   android:padding="20dp">
+
+   <Button
+
+       android:id="@+id/btnStart"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Start Service"/>
+
+   <Button
+
+       android:id="@+id/btnStop"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Stop Service"
+
+       android:layout_marginTop="15dp"/>
+
+   <Button
+
+       android:id="@+id/btnBound"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Bind Service"
+
+       android:layout_marginTop="15dp"/>
+
+</LinearLayout>
+
+Create a Started Service Class.
+
+Right Click: java package→ New → Java Class
+
+Class Name: MyStartedService
+
+File Name: MyStartedService.java
+
+package com.example.servicedemo;
+
+import android.app.Service;
+
+import android.content.Intent;
+
+import android.os.IBinder;
+
+import android.widget.Toast;
+
+public class MyStartedService extends Service {
+
+   @Override
+
+   public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Toast.makeText(
+
+                this,
+
+                "Started Service Running",
+
+                Toast.LENGTH_SHORT
+
+        ).show();
+
+        return START_STICKY;
+
+    }
+
+    @Override
+
+    public void onDestroy() {
+
+        super.onDestroy();
+
+        Toast.makeText(
+
+                this,
+
+                "Started Service Stopped",
+
+                Toast.LENGTH_SHORT
+
+        ).show();
+
+    }
+
+    @Override
+
+    public IBinder onBind(Intent intent) {
+
+        return null;
+
+    }
+
+}
+
+Create a Bound Service Class (Similar like above).
+
+Create Java Class: MyBoundService
+
+File Name:MyBoundService
+
+package com.example.servicedemo;
+
+import android.app.Service;
+
+import android.content.Intent;
+
+import android.os.Binder;
+
+import android.os.IBinder;
+
+public class MyBoundService extends Service {
+
+   private final IBinder binder = new LocalBinder();
+
+   public class LocalBinder extends Binder {
+
+        public MyBoundService getService() {
+
+            return MyBoundService.this;
+
+        }
+
+   }
+
+   @Override
+
+   public IBinder onBind(Intent intent) {
+
+        return binder;
+
+   }
+
+   public String getMessage() {
+
+        return "Bound Service Connected";
+
+    }
+
+}
+
+File Name: MainActivity.java
+
+package com.example.servicedemo;
+
+import android.content.ComponentName;
+
+import android.content.Intent;
+
+import android.content.ServiceConnection;
+
+import android.os.Bundle;
+
+import android.os.IBinder;
+
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button btnStart, btnStop, btnBound;
+
+    MyBoundService myBoundService;
+
+    boolean isBound = false;
+
+    @Override
+
+protected void onCreate(Bundle savedInstanceState) {
+
+   super.onCreate(savedInstanceState);
+
+   setContentView(R.layout.activity_main);
+
+   btnStart = findViewById(R.id.btnStart);
+
+   btnStop = findViewById(R.id.btnStop);
+
+   btnBound = findViewById(R.id.btnBound);
+
+   // Start Service
+
+   btnStart.setOnClickListener(v -> {
+
+         Intent intent = new Intent(
+
+                this,
+
+                MyStartedService.class
+
+         );
+
+         startService(intent);
+
+   });
+
+   // Stop Service
+
+   btnStop.setOnClickListener(v -> {
+
+         Intent intent = new Intent(
+
+                this,
+
+                  MyStartedService.class
+
+          );
+
+          stopService(intent);
+
+    });
+
+    // Bind Service
+
+    btnBound.setOnClickListener(v -> {
+
+          Intent intent = new Intent(
+
+                  this,
+
+                  MyBoundService.class
+
+          );
+
+          bindService(
+
+                  intent,
+
+                  serviceConnection,
+
+                  BIND_AUTO_CREATE
+
+          );
+
+    });
+
+}
+
+// Service Connection
+
+ServiceConnection serviceConnection = new ServiceConnection() {
+
+    @Override
+
+    public void onServiceConnected(
+
+               ComponentName name,
+
+                IBinder service) {
+
+             MyBoundService.LocalBinder binder =
+
+                     (MyBoundService.LocalBinder) service;
+
+             myBoundService = binder.getService();
+
+             isBound = true;
+
+             Toast.makeText(
+
+                     MainActivity.this,
+
+                     myBoundService.getMessage(),
+
+                     Toast.LENGTH_SHORT
+
+             ).show();
+
+         }
+
+         @Override
+
+         public void onServiceDisconnected(ComponentName name) {
+
+             isBound = false;
+
+         }
+
+    };
+
+    @Override
+
+    protected void onDestroy() {
+
+         super.onDestroy();
+
+         if (isBound) {
+
+             unbindService(serviceConnection);
+
+             isBound = false;
+
+         }
+
+    }
+
+}
+
+Add Services in AndroidManifest.xml (in Android Project Panel).
+
+Open:
+
+app→ Manifests → AndroidManifest.xml
+
+Inside: <application>
+
+Add:->
+
+<service android:name=".MyStartedService"/>
+
+<service android:name=".MyBoundService"/>
+
+
+====================================================================
+PRACTICAL 8
+SIMPLE STEPS
+Create project NotificationDemo. Add the Show Notification button in activity_main.xml. Add the POST_NOTIFICATIONS permission above the application tag. Paste MainActivity.java. Run, allow notifications if asked, then tap the button.
+
+CODE FROM PDF
+
+8. Develop an Android application implementing Notifications using Notification Manager.
+
+Project Name: NotificationDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:gravity="center">
+
+   <Button
+
+       android:id="@+id/btnNotify"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Show Notification"/>
+
+</LinearLayout>
+
+Add Permission in Manifest,
+
+Open: AndroidManifest.xml
+
+Add above <application>:
+
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS”/>
+
+File Name: MainActivity.java
+
+package com.example.notificationdemo;
+
+import android.Manifest;
+
+import android.app.NotificationChannel;
+
+import android.app.NotificationManager;
+
+import android.content.pm.PackageManager;
+
+import android.os.Build;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.app.NotificationCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+   private static final String CHANNEL_ID = "MyChannel";
+
+   private static final int NOTIFICATION_PERMISSION_CODE = 100;
+
+   private Button btnNotify;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+       super.onCreate(savedInstanceState);
+
+       setContentView(R.layout.activity_main);
+
+    // Find the button from activity_main.xml
+
+    btnNotify = findViewById(R.id.btnNotify);
+
+    // Create notification channel
+
+    createNotificationChannel();
+
+    // Request notification permission for Android 13+
+
+    requestNotificationPermission();
+
+    // Button click
+
+    btnNotify.setOnClickListener(v -> {
+
+          showNotification();
+
+    });
+
+}
+
+// Request notification permission
+
+private void requestNotificationPermission() {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+          if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+
+                 != PackageManager.PERMISSION_GRANTED) {
+
+             requestPermissions(
+
+                      new String[]{Manifest.permission.POST_NOTIFICATIONS},
+
+                      NOTIFICATION_PERMISSION_CODE
+
+             );
+
+        }
+
+    }
+
+}
+
+// Create notification channel
+
+private void createNotificationChannel() {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+        NotificationChannel channel = new NotificationChannel(
+
+                  CHANNEL_ID,
+
+                  "My Channel",
+
+                  NotificationManager.IMPORTANCE_DEFAULT
+
+        );
+
+        channel.setDescription("Notification Channel for Demo");
+
+        NotificationManager manager =
+
+                  getSystemService(NotificationManager.class);
+
+        if (manager != null) {
+
+             manager.createNotificationChannel(channel);
+
+        }
+
+    }
+
+}
+
+// Show notification
+
+private void showNotification() {
+
+   // Check permission for Android 13+
+
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+       if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+
+               != PackageManager.PERMISSION_GRANTED) {
+
+           requestNotificationPermission();
+
+           return;
+
+       }
+
+   }
+
+   NotificationCompat.Builder builder =
+
+           new NotificationCompat.Builder(this, CHANNEL_ID)
+
+                     .setSmallIcon(android.R.drawable.ic_dialog_info)
+
+                     .setContentTitle("Notification Example")
+
+                     .setContentText("Hello from Android Notification")
+
+                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+                     .setAutoCancel(true);
+
+   NotificationManager manager =
+
+           (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (manager != null) {
+
+            manager.notify(1, builder.build());
+
+        }
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 9
+SIMPLE STEPS
+Create project BroadcastDemo. Add the TextView in activity_main.xml. Create MyReceiver.java. Add the receiver declaration inside the application tag for the static receiver. Paste MainActivity.java for the dynamic receiver. Run and toggle Airplane Mode to test it.
+
+CODE FROM PDF
+
+9. Develop an Android application implementing Static and Dynamic Broadcast
+Receivers.
+
+Project Name: BroadcastDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:gravity="center">
+
+   <TextView
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Broadcast Receiver Example"
+
+       android:textSize="22sp"/>
+
+</LinearLayout>
+
+Create a Broadcast Receiver Class.
+
+Right Click:-> java package → New → Java Class Class Name: MyReceiver
+
+package com.example.broadcastdemo;
+
+import android.content.BroadcastReceiver;
+
+import android.content.Context;
+
+import android.content.Intent;
+
+import android.widget.Toast;
+
+public class MyReceiver extends BroadcastReceiver {
+
+    @Override
+
+    public void onReceive(Context context, Intent intent) {
+
+        Toast.makeText(
+
+                context,
+
+                "Broadcast Received",
+
+                Toast.LENGTH_SHORT
+
+        ).show();
+
+    }
+
+}
+
+Static Broadcast Receiver.
+
+Open:AndroidManifest.xml
+
+Inside: <application>
+
+Add:
+
+<receiver
+
+   android:name=".MyReceiver"
+
+   android:exported="true">
+
+   <intent-filter>
+
+       <action android:name="android.intent.action.AIRPLANE_MODE" />
+
+   </intent-filter>
+
+</receiver>
+
+Dynamic Broadcast Receiver.
+
+File Name: MainActivity.java
+
+package com.example.broadcastdemo;
+
+import android.content.IntentFilter;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+   MyReceiver myReceiver = new MyReceiver();
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+       super.onCreate(savedInstanceState);
+
+       setContentView(R.layout.activity_main);
+
+       // Dynamic Receiver
+
+       IntentFilter filter = new IntentFilter();
+
+       filter.addAction("android.intent.action.AIRPLANE_MODE");
+
+       ContextCompat.registerReceiver(
+
+                this,
+
+                myReceiver,
+
+                filter,
+
+                ContextCompat.RECEIVER_EXPORTED
+
+        );
+
+    }
+
+    @Override
+
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        unregisterReceiver(myReceiver);
+
+    }
+
+}
+
+Turn on airplane mode
+
+                               Database and Networking
+
+
+====================================================================
+PRACTICAL 10
+SIMPLE STEPS
+Create project SQLLiteCRUDDemo. Add the name fields, four buttons and result TextView in activity_main.xml. Create DBHelper.java. Paste MainActivity.java. Run: insert a name, view data, update a name, or delete a name.
+
+CODE FROM PDF
+
+  10. Develop an Android application implementing SQLite database CRUD operations.
+
+ProjectName: SQLLiteCRUDDemo
+
+File Name: activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:padding="20dp">
+
+   <EditText
+
+       android:id="@+id/etName"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:hint="Enter Name"/>
+
+   <EditText
+
+       android:id="@+id/etNewName"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:hint="Enter New Name"/>
+
+   <Button
+
+       android:id="@+id/btnInsert"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+      android:text="Insert"/>
+
+  <Button
+
+      android:id="@+id/btnView"
+
+      android:layout_width="match_parent"
+
+      android:layout_height="wrap_content"
+
+      android:text="View Data"/>
+
+  <Button
+
+      android:id="@+id/btnUpdate"
+
+      android:layout_width="match_parent"
+
+      android:layout_height="wrap_content"
+
+      android:text="Update"/>
+
+  <Button
+
+      android:id="@+id/btnDelete"
+
+      android:layout_width="match_parent"
+
+      android:layout_height="wrap_content"
+
+      android:text="Delete"/>
+
+  <TextView
+
+      android:id="@+id/txtResult" android:layout_width="match_parent"
+
+      android:layout_height="wrap_content"
+
+      android:textSize="18sp"
+
+       android:paddingTop="20dp"/>
+
+</LinearLayout>
+
+Create a Database Helper Class.
+
+Right Click:
+
+java package → New → Java Class
+
+Class Name: DBHelper
+
+package com.example.sqllitecruddemo;
+
+import android.content.ContentValues;
+
+import android.content.Context;
+
+import android.database.Cursor;
+
+import android.database.sqlite.SQLiteDatabase;
+
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+   public DBHelper(Context context) {
+
+        super(context, "StudentDB", null, 1);
+
+   }
+
+   @Override
+
+   public void onCreate(SQLiteDatabase db) {
+
+        db.execSQL("CREATE TABLE student(name TEXT)");
+
+   }
+
+   @Override
+
+   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        db.execSQL("DROP TABLE IF EXISTS student");
+
+    onCreate(db);
+
+}
+
+// Insert
+
+public void insertData(String name) {
+
+    SQLiteDatabase db = this.getWritableDatabase();
+
+    ContentValues values = new ContentValues();
+
+    values.put("name", name);
+
+    db.insert("student", null, values);
+
+}
+
+// View
+
+public String viewData() {
+
+    SQLiteDatabase db = this.getReadableDatabase();
+
+    Cursor cursor = db.rawQuery("SELECT * FROM student", null);
+
+    StringBuilder data = new StringBuilder();
+
+    while (cursor.moveToNext()) {
+
+          data.append(cursor.getString(0)).append("\n");
+
+    }
+
+    cursor.close();
+
+    return data.toString();
+
+}
+
+// Update
+
+public void updateData(String oldName, String newName) {
+
+    SQLiteDatabase db = this.getWritableDatabase();
+
+    ContentValues values = new ContentValues();
+
+    values.put("name", newName);
+
+    db.update(
+
+            "student",
+
+            values,
+
+            "name=?",
+
+            new String[]{oldName}
+
+    );
+
+}
+
+// Delete
+
+public void deleteData(String name) {
+
+    SQLiteDatabase db = this.getWritableDatabase();
+
+    db.delete(
+
+            "student",
+
+            "name=?",
+
+                new String[]{name}
+
+        );
+
+    }
+
+}
+
+MainActivity.java
+
+package com.example.sqllitecruddemo;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import android.widget.EditText;
+
+import android.widget.TextView;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText etName, etNewName;
+
+    TextView txtResult;
+
+    Button btnInsert, btnView, btnUpdate, btnDelete;
+
+    DBHelper dbHelper;
+
+@Override
+
+protected void onCreate(Bundle savedInstanceState) {
+
+   super.onCreate(savedInstanceState);
+
+   setContentView(R.layout.activity_main);
+
+   etName = findViewById(R.id.etName);
+
+   etNewName = findViewById(R.id.etNewName);
+
+   txtResult = findViewById(R.id.txtResult);
+
+   btnInsert = findViewById(R.id.btnInsert);
+
+   btnView = findViewById(R.id.btnView);
+
+   btnUpdate = findViewById(R.id.btnUpdate);
+
+   btnDelete = findViewById(R.id.btnDelete);
+
+   dbHelper = new DBHelper(this);
+
+   // Insert
+
+   btnInsert.setOnClickListener(v -> {
+
+       String name = etName.getText().toString();
+
+       dbHelper.insertData(name);
+
+       Toast.makeText(
+
+               this,
+
+               "Data Inserted",
+
+             Toast.LENGTH_SHORT
+
+      ).show();
+
+});
+
+// View
+
+btnView.setOnClickListener(v -> {
+
+      String data = dbHelper.viewData();
+
+      txtResult.setText(data);
+
+});
+
+// Update
+
+btnUpdate.setOnClickListener(v -> {
+
+      String oldName = etName.getText().toString();
+
+      String newName = etNewName.getText().toString();
+
+      dbHelper.updateData(oldName, newName);
+
+      Toast.makeText(
+
+             this,
+
+             "Data Updated",
+
+             Toast.LENGTH_SHORT
+
+      ).show();
+
+});
+
+        // Delete
+
+        btnDelete.setOnClickListener(v -> {
+
+              String name = etName.getText().toString();
+
+              dbHelper.deleteData(name);
+
+              Toast.makeText(
+
+                     this,
+
+                     "Data Deleted",
+
+                     Toast.LENGTH_SHORT
+
+              ).show();
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 11
+SIMPLE STEPS
+Create project SQLiteCRUDDemo. Add an EditText, Insert and View Data buttons, and a ListView in activity_main.xml. Create DBHelper.java. Paste MainActivity.java. Run: enter a name, tap Insert, then View Data.
+
+CODE FROM PDF
+
+11. Develop an Android application integrating SQLite with ListView or RecyclerView.
+
+Project Name : SQLiteCRUDDemo
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:padding="20dp">
+
+   <EditText
+
+       android:id="@+id/etName"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:hint="Enter Name" />
+
+   <Button
+
+       android:id="@+id/btnInsert"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:text="Insert" />
+
+   <Button
+
+       android:id="@+id/btnView"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:text="View Data" />
+
+   <ListView
+
+       android:id="@+id/listView"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+Create New Java Class in Package Folder
+
+Name as: DBHelper
+
+package com.example.sqlitecruddemo;
+
+import android.content.ContentValues;
+
+import android.content.Context;
+
+import android.database.Cursor;
+
+import android.database.sqlite.SQLiteDatabase;
+
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+   public DBHelper(Context context) {
+
+    super(context, "StudentDB", null, 1);
+
+}
+
+@Override
+
+public void onCreate(SQLiteDatabase db) {
+
+    db.execSQL("CREATE TABLE student(name TEXT)");
+
+}
+
+@Override
+
+public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    // Database upgrade code goes here
+
+}
+
+// Insert Data
+
+public void insertData(String name) {
+
+    SQLiteDatabase db = this.getWritableDatabase();
+
+    ContentValues values = new ContentValues();
+
+    values.put("name", name);
+
+    db.insert("student", null, values);
+
+}
+
+// Get All Data
+
+public ArrayList<String> getData() {
+
+        ArrayList<String> list = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT name FROM student", null);
+
+        while (cursor.moveToNext()) {
+
+            list.add(cursor.getString(0));
+
+        }
+
+        cursor.close();
+
+        return list;
+
+    }
+
+}
+
+MainActivity.java
+
+package com.example.sqlitecruddemo;
+
+import android.os.Bundle;
+
+import android.widget.ArrayAdapter;
+
+import android.widget.Button;
+
+import android.widget.EditText;
+
+import android.widget.ListView;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+  EditText etName;
+
+  Button btnInsert, btnView;
+
+  ListView listView;
+
+  DBHelper dbHelper;
+
+  @Override
+
+  protected void onCreate(Bundle savedInstanceState) {
+
+      super.onCreate(savedInstanceState);
+
+      setContentView(R.layout.activity_main);
+
+      etName = findViewById(R.id.etName);
+
+      btnInsert = findViewById(R.id.btnInsert);
+
+      btnView = findViewById(R.id.btnView);
+
+      listView = findViewById(R.id.listView);
+
+      dbHelper = new DBHelper(this);
+
+// Insert Data
+
+btnInsert.setOnClickListener(v -> {
+
+      String name = etName.getText().toString();
+
+      dbHelper.insertData(name);
+
+      Toast.makeText(
+
+             this,
+
+             "Data Inserted",
+
+             Toast.LENGTH_SHORT
+
+      ).show();
+
+      etName.setText("");
+
+});
+
+// View Data
+
+btnView.setOnClickListener(v -> {
+
+      ArrayList<String> list = dbHelper.getData();
+
+      ArrayAdapter<String> adapter = new ArrayAdapter<>(
+
+             this,
+
+             android.R.layout.simple_list_item_1,
+
+             list
+
+      );
+
+              listView.setAdapter(adapter);
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 12
+SIMPLE STEPS
+Create project JSONDEMO. Add Internet permission above the application tag. Add the button and result TextView in activity_main.xml. Paste MainActivity.java. Run with internet access and tap Fetch JSON Data. The app fetches a sample post and displays its title and body.
+
+CODE FROM PDF
+
+12. Develop an Android application to fetch and parse JSON data from a web
+
+PROJECTNAME: JSONDEMO
+
+Add Internet Permission.
+AndroidManifest.xml
+Add following above: <application> tag
+<uses-permission android:name="android.permission.INTERNET"/>
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:padding="20dp">
+
+   <Button
+
+       android:id="@+id/btnFetch"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:text="Fetch JSON Data" />
+
+   <TextView
+
+       android:id="@+id/txtResult"
+
+       android:layout_width="match_parent"
+
+       android:layout_height="wrap_content"
+
+       android:layout_marginTop="20dp"
+
+       android:textSize="18sp"
+
+       android:textColor="#000000" />
+
+</LinearLayout>
+
+MainActivity.java
+
+package com.example.jsondemo;
+
+package com.example.jsondemo;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import android.widget.TextView;
+
+import java.io.BufferedReader;
+
+import java.io.InputStreamReader;
+
+import java.net.HttpURLConnection;
+
+import java.net.URL;
+
+import org.json.JSONObject;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+  Button btnFetch;
+
+  TextView txtResult;
+
+  @Override
+
+  protected void onCreate(Bundle savedInstanceState) {
+
+      super.onCreate(savedInstanceState);
+
+      setContentView(R.layout.activity_main);
+
+      btnFetch = findViewById(R.id.btnFetch);
+
+      txtResult = findViewById(R.id.txtResult);
+
+      btnFetch.setOnClickListener(v -> {
+
+            fetchData();
+
+      });
+
+  }
+
+  private void fetchData() {
+
+      new Thread(() -> {
+
+          try {
+
+              // Web Service URL
+
+               URL url = new
+URL("https://jsonplaceholder.typicode.com/posts/1");
+
+              HttpURLConnection connection =
+
+                      (HttpURLConnection) url.openConnection();
+
+              connection.setRequestMethod("GET");
+
+              connection.setRequestMethod("GET");
+
+               BufferedReader reader = new BufferedReader(new
+InputStreamReader(
+
+                               connection.getInputStream()
+
+        )
+
+);
+
+StringBuilder result = new StringBuilder();
+
+String line;
+
+while ((line = reader.readLine()) != null) {
+
+     result.append(line);
+
+}
+
+reader.close();
+
+// JSON Parsing
+
+JSONObject jsonObject =
+
+        new JSONObject(result.toString());
+
+String title =
+
+        jsonObject.getString("title");
+
+    String body =
+
+               jsonObject.getString("body");
+
+    // Display Data
+
+    runOnUiThread(() -> {
+
+          txtResult.setText(
+
+                  "Title: " + title +
+
+                          "\n\nBody: " + body
+
+          );
+
+    });
+
+    connection.disconnect();
+
+} catch (Exception e) {
+
+    e.printStackTrace();
+
+    runOnUiThread(() -> {
+
+          txtResult.setText(
+
+                  "Error: " + e.getMessage()
+
+          );
+
+    });
+
+}
+
+        }).start();
+
+    }
+
+}
+
+             https://jsonplaceholder.typicode.com/posts/1
+
+                    Concurrency, Media and Security
+
+
+====================================================================
+PRACTICAL 13
+SIMPLE STEPS
+Create project ThreadHandlerDemo. Add the Start Background Task button and result TextView in activity_main.xml. Paste MainActivity.java. Run and tap the button; after about three seconds, the completion message appears.
+
+CODE FROM PDF
+
+13. Develop an Android application demonstrating Threads and Handlers for background
+processing.
+
+Project Name: ThreadHandlerDemo
+
+Activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+
+    android:gravity="center"
+
+    android:padding="20dp">
+
+    <Button
+
+       android:id="@+id/btnStart"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Start Background Task"/>
+
+    <TextView
+
+       android:id="@+id/txtResult"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:textSize="22sp"
+
+       android:paddingTop="20dp"/></LinearLayout>
+
+MainActivity.java
+
+package com.example.threadhandlerdemo;
+
+import android.os.Bundle;
+
+import android.os.Handler;
+
+import android.os.Looper;
+
+import android.widget.Button;
+
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button btnStart;
+
+    TextView txtResult;
+
+    Handler handler = new Handler(Looper.getMainLooper());
+
+    @Override
+
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        btnStart = findViewById(R.id.btnStart);
+
+        txtResult = findViewById(R.id.txtResult);
+
+        btnStart.setOnClickListener(v -> {
+
+              // Background Thread
+
+              Thread thread = new Thread(() -> {
+
+                    try {
+
+                          // Simulate Background Work
+
+                          Thread.sleep(3000);
+
+                    } catch (Exception e) {
+
+                          e.printStackTrace();
+
+                    }
+
+                    // Update UI using Handler
+
+                    handler.post(() -> {
+
+                          txtResult.setText("Background Task Completed");
+
+                    });
+
+              });
+
+              thread.start();
+
+        });
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 14
+SIMPLE STEPS
+Create project MediaTelephoneDemo. Add the two buttons in activity_main.xml. Create res/raw and place a small MP3 file named music.mp3 inside it. Paste MainActivity.java. Run: Play Music plays the file; Open Dialer opens the phone dialer with a number filled in.
+
+CODE FROM PDF
+
+14. Develop an Android application implementing Media APIs and Telephone APIs.
+
+Project Name: MediaTelephoneDemo
+
+activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:orientation="vertical"
+
+   android:gravity="center"
+
+   android:padding="20dp">
+
+   <Button
+
+       android:id="@+id/btnPlay"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Play Music"/>
+
+   <Button
+
+       android:id="@+id/btnDial"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+       android:text="Open Dialer"
+
+       android:layout_marginTop="20dp"/> </LinearLayout>
+
+Add Audio File.
+Create New folder in Android Project Panel: res raw
+
+Download or use pre-existing small size MP3 file inside raw folder: music.mp3
+
+ MainActivity.java.
+
+package com.example.mediatelephonedemo;
+
+import android.content.Intent;
+
+import android.media.MediaPlayer;
+
+import android.net.Uri;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+   Button btnPlay, btnDial;
+
+   MediaPlayer mediaPlayer;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        btnPlay = findViewById(R.id.btnPlay);
+
+        btnDial = findViewById(R.id.btnDial);
+
+        // Media API
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.music);
+
+        // Play music
+
+        btnPlay.setOnClickListener(v -> {
+
+              mediaPlayer.start();
+
+        });
+
+        // Open phone dialer
+
+        btnDial.setOnClickListener(v -> {
+
+              Intent intent = new Intent(Intent.ACTION_DIAL);
+
+              intent.setData(Uri.parse("tel:9876543210"));
+
+              startActivity(intent);
+
+        });
+
+    }
+
+    @Override
+
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        if (mediaPlayer != null) {
+
+              mediaPlayer.release();
+
+              mediaPlayer = null;
+
+        }
+
+    }
+
+}
+
+
+====================================================================
+PRACTICAL 15
+SIMPLE STEPS
+Create project PermissionDemo. Add CAMERA permission and the camera feature line above the application tag in AndroidManifest.xml. Add the button in activity_main.xml. Paste MainActivity.java. Run and tap Request Camera Permission, then allow or deny the permission.
+
+CODE FROM PDF
+
+15. Develop an Android application implementing Runtime Permissions and security
+handling in AndroidManifest.xml
+
+Project Name:PermissionDemo
+
+Add Permission in AndroidManifest.xml.
+Open:
+AndroidManifest.xml
+Add below code lines above: <application> tag
+<uses-permission android:name="android.permission.CAMERA"/>
+<uses-feature android:name="android.hardware.camera"
+android:required="false" />
+
+activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+   xmlns:android="http://schemas.android.com/apk/res/android"
+
+   android:layout_width="match_parent"
+
+   android:layout_height="match_parent"
+
+   android:gravity="center">
+
+   <Button
+
+       android:id="@+id/btnPermission"
+
+       android:layout_width="wrap_content"
+
+       android:layout_height="wrap_content"
+
+        android:text="Request Camera Permission"/>
+
+</LinearLayout>
+
+MainActivity.java
+
+package com.example.permissiondemo;
+
+import android.content.pm.PackageManager;
+
+import android.os.Bundle;
+
+import android.widget.Button;
+
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+   Button btnPermission;
+
+   @Override
+
+   protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        btnPermission = findViewById(R.id.btnPermission);
+
+    btnPermission.setOnClickListener(v -> {
+
+          checkPermission();
+
+    });
+
+}
+
+private void checkPermission() {
+
+    // Check if Camera permission is already granted
+
+    if (ContextCompat.checkSelfPermission(
+
+             this,
+
+             android.Manifest.permission.CAMERA
+
+    ) == PackageManager.PERMISSION_GRANTED) {
+
+          Toast.makeText(
+
+                 this,
+
+                 "Permission Already Granted",
+
+                 Toast.LENGTH_SHORT
+
+          ).show();
+
+    } else {
+
+          // Request Camera permission
+
+          ActivityCompat.requestPermissions(
+
+                 this,
+
+                 new String[]{
+
+                            android.Manifest.permission.CAMERA
+
+                   },
+
+                   1
+
+           );
+
+      }
+
+}
+
+// Permission Result
+
+@Override
+
+public void onRequestPermissionsResult(
+
+           int requestCode,
+
+           String[] permissions,
+
+           int[] grantResults
+
+) {
+
+      super.onRequestPermissionsResult(
+
+                requestCode,
+
+                permissions,
+
+                grantResults
+
+      );
+
+      if (requestCode == 1) {
+
+           if (grantResults.length > 0
+
+                   && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(
+
+                        this,
+
+                       "Permission Granted",
+
+                       Toast.LENGTH_SHORT
+
+                ).show();
+
+            } else {
+
+                Toast.makeText(
+
+                       this,
+
+                       "Permission Denied",
+
+                       Toast.LENGTH_SHORT
+
+                ).show();
+
+            }
+
+        }
+
+    }
+
+}
